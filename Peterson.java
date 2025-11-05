@@ -24,9 +24,27 @@ public class Peterson extends CriticalSection_Base {
             turn.set(k, i);
 
             // do nothing while there is some process that is at the same or higher level than me an dit's my turn...
-
+            boolean waiting;
+            do {
+                waiting = false;
+                if (turn.get(k) == i) {
+                    for (int j = 0; j < n; j++) {
+                        if (j == i) continue;
+                        if (flag.get(j) >= k) {
+                            // there exists some j process and turn[k] == 1
+                            waiting = true;
+                            break;
+                        }
+                    }
+                }
+                if (waiting) Thread.onSpinWait();
+            } while (waiting);
         }
 
+    }
+    @Override
+    public void ExitSection(Worker thread) {
+        flag.set(thread.ID, -1);
     }
 
 }
