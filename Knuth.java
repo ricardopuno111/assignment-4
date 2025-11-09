@@ -2,54 +2,39 @@ import java.util.concurrent.atomic.AtomicIntegerArray;
 
 public class Knuth extends CriticalSection_Base {
     
-    private final AtomicIntegerArray flag; // 0 = idle, 1 = requesting, 2 = in cs
-    private final AtomicIntegerArray turn;
+    private static final int IDLE = 0;
+    private static final int REQ = 1;
+    private static final int CS = 2;
+
     private final int n;
+    private final AtomicIntegerArray flag;
+    private volatile int turn;
 
     public Knuth(int n) {
         this.n = n;
         this.flag = new AtomicIntegerArray(n);
-        for (int i = 0; i < n; i++) flag.set(i, 0);
-        this.turn = new AtomicIntegerArray(0);
-        turn.set(0, 0);
+        this.turn = 0;
+        for (int i = 0; i < n; i++) {
+            flag.set(i, IDLE);
+        }
     }
 
     @Override
     public void EntrySection(Worker thread) {
         int i = thread.ID;
-        flag.set(i, 1); // requesting
-
-        int j = turn.get();
-        while (j != i) {
-            if (flag.get(j) != 0) {
-                j = turn.get();
-            } else {
-                j = (j - 1 + n) %n ;
-            }
-            Thread.onSpinWait();
-        }
-
-        flag.set(i, 2); // in cs
-
-        boolean conflict;
-        do {
-            conflict = false;
-            for (int k = 0; k < n; k++) {
-                if (k != i&& flag.get(k) == 2) {
-                    conflict = true;
-                    break;
-                }
-            }
-            if (conflict) Thread.onSpinWait();
-        }   while (conflict);
-
-        turn.set(i);
+        int j;
     }
-
+    
     @Override
     public void ExitSection(Worker thread) {
         int i = thread.ID;
-        turn.set((i -1 + n) % n);
-        flag.set(i, 0);
+        turn = (i - + n) % n;
+        flag.set(i, IDLE); 
     }
+
+    // helper for determining if CS is empty
+    private boolean allOtherFlagsNotInCS(int i) {
+
+    }
+
 }
