@@ -30,37 +30,31 @@ public class Knuth extends CriticalSection_Base {
 
             while (j != i) {
                 if (flag.get(j) != IDLE)
-                j = turn;
-
-                while (j != 1) {
-                    if (flag.get(j) != IDLE)
-                        j = turn;
-                    else 
-                        j = (j - 1 + n) % n;
-                }
-
-                flag.set(i, CS);
+                    j = turn;
+                else
+                    j = (j - 1 + n) % n;
             }
-        }   while (!allOtherFlagsNotInCS(i));
+
+            flag.set(i, CS);
+
+            // repeat until all other threads are not IN_CS
+        } while (!allOtherFlagsNotInCS(i));
 
         turn = i;
-
     }
-    
+
     @Override
     public void ExitSection(Worker thread) {
         int i = thread.ID;
         turn = (i - 1 + n) % n;
-        flag.set(i, IDLE); 
+        flag.set(i, IDLE);
     }
 
-    // helper for determining if CS is empty
     private boolean allOtherFlagsNotInCS(int i) {
         for (int j = 0; j < n; j++) {
             if (j != i && flag.get(j) == CS)
                 return false;
-        } // else
+        }
         return true;
     }
-
 }
