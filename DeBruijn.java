@@ -33,7 +33,7 @@ public class DeBruijn extends CriticalSection_Base {
                 if (flag.get(j) != IDLE)
                     j = turn;
                 else
-                    j = ((j - 1) % n + n) % n; // safe modulus for negatives
+                    j = (j - 1 + n) % n;
             }
 
             flag.set(i, CS);
