@@ -5,6 +5,7 @@ public class Server {
         //Write your code here to create your threads and test the 3 different algorithms
         //When making worker threads it is recommended for ID to start at 0 and increment by 1 
 
+        
         // Peterson's
         System.out.println("CS Solution 1 – Peterson’s (time in milli-seconds)");
         System.out.println("Threads\tAVG TAT");
@@ -46,6 +47,7 @@ public class Server {
         
         System.out.println();
 
+        
         System.out.println("CS Solution 2 – Knuth’s (time in milli-seconds)");
         System.out.println("Threads\tAVG TAT");
 
@@ -72,13 +74,13 @@ public class Server {
             }
 
             long endNs = System.nanoTime();
-            double totalMs = (endNs - startNs) / 1000000.0;
+            double totalMs = (endNs - startNs) / 1_000_000.0;
             double avgTAT = totalMs / numThreads;
 
             System.out.printf("%d\t%.3f ms%n", numThreads, avgTAT);
 
         }
-
+        
         System.out.println();
 
         System.out.println("CS Solution 3 – De Bruijn's (time in milli-seconds)");
@@ -107,13 +109,13 @@ public class Server {
             }
 
             long endNs = System.nanoTime();
-            double totalMs = (endNs - startNs) / 1000000.0;
+            double totalMs = (endNs - startNs) / 1_000_000.0;
             double avgTAT = totalMs / numThreads;
 
             System.out.printf("%d\t%.3f ms%n", numThreads, avgTAT);
 
         }
-
+        
     }
 }
 
