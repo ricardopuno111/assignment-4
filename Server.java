@@ -88,7 +88,7 @@ public class Server {
 
         for (int numThreads = 2; numThreads <= 100; numThreads++) {
 
-            DeBruijin section = new DeBruijin(numThreads);
+            DeBruijn section = new DeBruijn(numThreads);
 
             CountDownLatch startSignal = new CountDownLatch(1);
             CountDownLatch doneSignal = new CountDownLatch(numThreads);
@@ -109,7 +109,7 @@ public class Server {
             }
 
             long endNs = System.nanoTime();
-            double totalMs = (endNs - startNs) / 1000.0;
+            double totalMs = (endNs - startNs) / 1000000.0;
             double avgTAT = totalMs / numThreads;
 
             System.out.printf("%d\t%.3f ms%n", numThreads, avgTAT);

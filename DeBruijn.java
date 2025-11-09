@@ -2,8 +2,7 @@
 import java.util.concurrent.atomic.AtomicIntegerArray;
 
 
-public class DeBruijin extends CriticalSection_Base {
-    
+public class DeBruijn extends CriticalSection_Base {
     private static final int IDLE = 0;
     private static final int REQ = 1;
     private static final int CS = 2;
@@ -12,7 +11,7 @@ public class DeBruijin extends CriticalSection_Base {
     private final AtomicIntegerArray flag;
     private volatile int turn;
 
-    public DeBruijin(int n) {
+    public DeBruijn(int n) {
         this.n = n;
         this.flag = new AtomicIntegerArray(n);
         this.turn = 0;
@@ -34,15 +33,11 @@ public class DeBruijin extends CriticalSection_Base {
                 if (flag.get(j) != IDLE)
                     j = turn;
                 else
-                    j = (j - 1 + n) % n;
+                    j = ((j - 1) % n + n) % n; // safe modulus for negatives
             }
 
             flag.set(i, CS);
-
-            // repeat until all other threads are not IN_CS
         } while (!allOtherFlagsNotInCS(i));
-
-        turn = i;
     }
 
     @Override
@@ -50,11 +45,12 @@ public class DeBruijin extends CriticalSection_Base {
         int i = thread.ID;
 
         int t = turn;
-
-        // conditional
+        // conditional update
         if (flag.get(t) == IDLE || t == i) {
-            turn = ((turn -1) % n + n) % n;
+            turn = ((turn - 1) % n + n) % n;
         }
+
+        flag.set(i, IDLE);
     }
 
     private boolean allOtherFlagsNotInCS(int i) {
@@ -64,5 +60,4 @@ public class DeBruijin extends CriticalSection_Base {
         }
         return true;
     }
-
 }
