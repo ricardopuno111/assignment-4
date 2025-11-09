@@ -9,6 +9,8 @@ public class Server {
         System.out.println("CS Solution 1 – Peterson’s (time in milli-seconds)");
         System.out.println("Threads\tAVG TAT");
 
+        /* 
+
         for (int numThreads = 2; numThreads <= 100; numThreads++) {
 
             Peterson section = new Peterson(numThreads);
@@ -42,7 +44,7 @@ public class Server {
             System.out.printf("%d\t%.3f ms%n", numThreads, avgTAT);
 
         }
-        
+        */
         System.out.println();
 
         System.out.println("CS Solution 2 – Knuth’s (time in milli-seconds)");
