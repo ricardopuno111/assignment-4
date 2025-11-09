@@ -47,7 +47,14 @@ public class DeBruijin extends CriticalSection_Base {
 
     @Override
     public void ExitSection(Worker thread) {
+        int i = thread.ID;
 
+        int t = turn;
+
+        // conditional
+        if (flag.get(t) == IDLE || t == i) {
+            turn = ((turn -1) % n + n) % n;
+        }
     }
 
     private boolean allOtherFlagsNotInCS(int i) {
