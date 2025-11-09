@@ -9,8 +9,7 @@ public class Server {
         System.out.println("CS Solution 1 – Peterson’s (time in milli-seconds)");
         System.out.println("Threads\tAVG TAT");
 
-        /* 
-
+        
         for (int numThreads = 2; numThreads <= 100; numThreads++) {
 
             Peterson section = new Peterson(numThreads);
@@ -73,17 +72,16 @@ public class Server {
             }
 
             long endNs = System.nanoTime();
-            double totalMs = (endNs - startNs) / 1000.0;
+            double totalMs = (endNs - startNs) / 1000000.0;
             double avgTAT = totalMs / numThreads;
 
             System.out.printf("%d\t%.3f ms%n", numThreads, avgTAT);
 
         }
-            */
 
         System.out.println();
 
-        System.out.println("CS Solution 3 – De Bruijin's (time in milli-seconds)");
+        System.out.println("CS Solution 3 – De Bruijn's (time in milli-seconds)");
         System.out.println("Threads\tAVG TAT");
 
         for (int numThreads = 2; numThreads <= 100; numThreads++) {
