@@ -43,8 +43,40 @@ public class Server {
 
         }
         
-        
+        System.out.println();
 
+        System.out.println("CS Solution 2 – Knuth’s (time in milli-seconds)");
+        System.out.println("Threads\tAVG TAT");
+
+        for (int numThreads = 2; numThreads <= 100; numThreads++) {
+
+            Knuth section = new Knuth(numThreads);
+
+            CountDownLatch startSignal = new CountDownLatch(1);
+            CountDownLatch doneSignal = new CountDownLatch(numThreads);
+            Worker[] workers = new Worker[numThreads];
+
+            for (int i = 0; i < numThreads; i++) {
+                workers[i] = new Worker(section, i, startSignal, doneSignal);
+                workers[i].start();
+            }
+
+            long startNs = System.nanoTime();
+            startSignal.countDown();
+
+            try {
+                doneSignal.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            long endNs = System.nanoTime();
+            double totalMs = (endNs - startNs) / 1_000_000.0;
+            double avgTAT = totalMs / numThreads;
+
+            System.out.printf("%d\t%.3f ms%n", numThreads, avgTAT);
+
+        }
 
     }
 }
